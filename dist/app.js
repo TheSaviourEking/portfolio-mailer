@@ -20,11 +20,23 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const PORT = process.env.PORT || 8000;
 const app = (0, express_1.default)();
-// Enable CORS with default settings (allow all origins)
-// app.use(cors());
+// Define allowed origins
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://portfolio-mailer-8sx0.onrender.com',
+    'https://savioureking.vercel.app'
+];
 // Alternatively, you can specify more detailed CORS settings if needed
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3000', // replace with your frontend URL
+    origin: (origin, callback) => {
+        if (origin === undefined || allowedOrigins.includes(origin)) {
+            // Allow requests with no origin (e.g., mobile apps or curl requests)
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204
