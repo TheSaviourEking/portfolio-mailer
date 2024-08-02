@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const PORT = process.env.PORT || 8000
+
 const app = express();
 
 // Enable CORS with default settings (allow all origins)
@@ -137,6 +139,6 @@ app.post('/sendmail', async (req: Request, res: Response) => {
     }
 });
 
-app.listen(8000, () => {
-    console.log('Listening on port 8000');
+app.listen(PORT, () => {
+    console.log('Listening on port ', PORT);
 });

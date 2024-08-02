@@ -18,6 +18,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+const PORT = process.env.PORT || 8000;
 const app = (0, express_1.default)();
 // Enable CORS with default settings (allow all origins)
 // app.use(cors());
@@ -136,6 +137,6 @@ app.post('/sendmail', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         return res.status(500).json({ message: 'Error sending email', error: error instanceof Error ? error.message : String(error) });
     }
 }));
-app.listen(8000, () => {
-    console.log('Listening on port 8000');
+app.listen(PORT, () => {
+    console.log('Listening on port ', PORT);
 });
