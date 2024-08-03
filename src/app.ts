@@ -11,26 +11,31 @@ const PORT = process.env.PORT || 8000
 const app = express();
 
 // Define allowed origins
-const allowedOrigins = [
-    'http://localhost:3000',
-    'https://portfolio-mailer-8sx0.onrender.com',
-    'https://savioureking.vercel.app'
-];
+// const allowedOrigins = [
+//     'http://localhost:3000',
+//     'https://portfolio-mailer-8sx0.onrender.com',
+//     'https://savioureking.vercel.app'
+// ];
 
-// Alternatively, you can specify more detailed CORS settings if needed
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+  ? ['https://portfolio-mailer-8sx0.onrender.com', 'https://savioureking.vercel.app']
+  : ['http://localhost:3000'];
+
+  // Alternatively, you can specify more detailed CORS settings if needed
 app.use(cors({
-    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-        if (origin === undefined || allowedOrigins.includes(origin)) {
-            // Allow requests with no origin (e.g., mobile apps or curl requests)
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204
 }));
+
 
 // Middleware for logging requests, excluding OPTIONS requests
 // morgan.token('status', (req, res) => {
